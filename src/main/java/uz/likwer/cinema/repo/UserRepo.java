@@ -1,14 +1,18 @@
-package com.example.chat.repo;
+package uz.likwer.cinema.repo;
 
-import com.example.chat.entity.User;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.Cookie;
+import uz.likwer.cinema.entity.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.UUID;
 
-import static com.example.chat.config.DataLoader.emf;
+import static uz.likwer.cinema.config.DataLoader.emf;
 
 public class UserRepo {
 
@@ -24,8 +28,8 @@ public class UserRepo {
         return entityManager.find(User.class, uuid);
     }
 
-    public static Optional<User> findByUserName(String userName) {
-        return emf.createEntityManager().createQuery("select t from User t where username=:name", User.class).setParameter("name", userName).getResultList().stream().findFirst();
+    public static Optional<User> findByEmail(String email) {
+        return emf.createEntityManager().createQuery("select t from User t where email=:email", User.class).setParameter("email", email).getResultList().stream().findFirst();
     }
 
     public static void save(User user) {
@@ -42,5 +46,30 @@ public class UserRepo {
         cookie.setPath("/");
         cookie.setSecure(false);
         return cookie;
+    }
+    public static void sendMail(String toEmail, Integer code) {
+        String companyEmail = "qwertyggg7878@gmail.com";
+        String companyPassword = "albjiatyqspthkrz";
+
+        try{
+            Properties properties = new Properties();
+            properties.put("mail.smtp.host", "smtp.gmail.com");
+            properties.put("mail.smtp.port", "465");
+            properties.put("mail.smtp.ssl.enable", "true");
+            properties.put("mail.smtp.auth", "true");
+            Session session = Session.getInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(companyEmail, companyPassword);
+                }
+            });
+            Message message = new MimeMessage(session);
+            message.setText(code+"");
+            message.setFrom(new InternetAddress(companyEmail));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+            Transport.send(message);
+        }catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

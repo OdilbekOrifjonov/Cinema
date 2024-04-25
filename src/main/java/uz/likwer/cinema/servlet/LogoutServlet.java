@@ -1,4 +1,4 @@
-package com.example.chat.servlet;
+package uz.likwer.cinema.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

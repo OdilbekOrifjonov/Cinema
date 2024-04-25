@@ -1,13 +1,18 @@
-package com.example.chat.servlet;
+package uz.likwer.cinema.servlet;
 
-import com.example.chat.entity.User;
-import com.example.chat.repo.UserRepo;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import uz.likwer.cinema.entity.User;
+import uz.likwer.cinema.repo.UserRepo;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Properties;
+import java.util.Random;
 
 @WebServlet(name = "fromLoginToLoginJsp", value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -20,38 +25,41 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
-        String username = req.getParameter("username");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        Optional<User> userOpt = UserRepo.findByUserName(username);
+        Optional<User> userOpt = UserRepo.findByEmail(email);
 
 
+        Integer code = new Random().nextInt(9000) + 1000;
         if (userOpt.isPresent()) {
             User user = userOpt.get();
 
             if (user.getPassword().equals(password)) {
-                resp.addCookie(UserRepo.getCookieWithUser(user));
+                Thread sendMailThread = new Thread(() -> UserRepo.sendMail(user.getEmail(), code));
+                sendMailThread.start();
+                
+                session.setAttribute("code", code);
+                session.setAttribute("userTemp", user);
 
-                session.setAttribute("currentUser", user);
-                resp.sendRedirect("/");
+                resp.sendRedirect("/checkmail.jsp");
             } else {
                 session.setAttribute("error", "Invalid password");
                 resp.sendRedirect("/login.jsp");
             }
         } else {
             User newUser = User.builder()
-                    .username(username)
+                    .email(email)
                     .password(password)
                     .build();
-            UserRepo.save(newUser);
 
-            Cookie cookie = UserRepo.getCookieWithUser(newUser);
+            Thread sendMailThread = new Thread(() -> UserRepo.sendMail(newUser.getEmail(), code));
+            sendMailThread.start();
 
-            resp.addCookie(cookie);
+            session.setAttribute("code", code);
+            session.setAttribute("userTemp", newUser);
 
-            session.setAttribute("success", "User created successfully");
-            session.setAttribute("currentUser", newUser);
-            resp.sendRedirect("/");
+            resp.sendRedirect("/checkmail.jsp");
         }
     }
 }

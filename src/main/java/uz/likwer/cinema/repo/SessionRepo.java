@@ -1,9 +1,9 @@
 package uz.likwer.cinema.repo;
 
 import jakarta.persistence.EntityManager;
-import jakarta.servlet.http.Cookie;
 import uz.likwer.cinema.entity.Movie;
-import uz.likwer.cinema.entity.User;
+import uz.likwer.cinema.entity.Seat;
+import uz.likwer.cinema.entity.Session;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,21 +11,31 @@ import java.util.UUID;
 
 import static uz.likwer.cinema.config.DataLoader.emf;
 
-public class MovieRepo {
+public class SessionRepo {
 
-    public static List<Movie> findAll() {
-        return emf.createEntityManager().createQuery("from Movie", Movie.class).getResultList();
+    public static List<Session> findAll() {
+        return emf.createEntityManager().createQuery("from Session", Session.class).getResultList();
     }
-    public static Movie findById(UUID uuid) {
+    public static Session findById(UUID uuid) {
         EntityManager entityManager = emf.createEntityManager();
-        return entityManager.find(Movie.class, uuid);
+        return entityManager.find(Session.class, uuid);
     }
 
-    public static void save(Movie movie) {
+    public static void save(Session session) {
         EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.persist(movie);
+        entityManager.persist(session);
         entityManager.getTransaction().commit();
         entityManager.close();
+    }
+
+    public static List<Session> findAllByMovieId(UUID movieId) {
+        return emf.createEntityManager().createQuery("select t from Session t where t.movie.id=:movieId", Session.class).setParameter("movieId",movieId).getResultList();
+    }
+
+    public static Optional<Session> findBySeatId(UUID seatId) {
+        for (Session session : findAll())
+            for (Seat seat : session.getSeats()) if (seat.getId().equals(seatId)) return Optional.of(session);
+        return Optional.empty();
     }
 }

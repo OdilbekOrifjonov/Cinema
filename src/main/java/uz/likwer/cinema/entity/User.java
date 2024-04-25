@@ -1,4 +1,4 @@
-package com.example.chat.entity;
+package uz.likwer.cinema.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,8 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String username;
+    private String email;
     private String password;
 
-    private String photo;
 }

@@ -2,6 +2,7 @@ package uz.likwer.cinema.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import uz.likwer.cinema.repo.SessionRepo;
 
 import java.util.UUID;
 
@@ -11,13 +12,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
-public class Attachment {
+public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
-    private String contentType;
-    private Integer size;
+    @ManyToOne
+    private User user;
 
+    @ManyToOne
+    private Seat seat;
 }

@@ -11,12 +11,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
-public class Hall {
+public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String email;
-    private String password;
+    private Boolean isBooked = false;
 
+    @ManyToOne
+    private User user;
 }

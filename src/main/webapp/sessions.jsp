@@ -1,72 +1,62 @@
+<%@ page import="java.util.UUID" %>
+<%@ page import="java.util.List" %>
+<%@ page import="uz.likwer.cinema.entity.Session" %>
+<%@ page import="uz.likwer.cinema.repo.SessionRepo" %>
+<%@ page import="uz.likwer.cinema.utils.Utils" %>
+<%@ page import="uz.likwer.cinema.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>Login/Sign Up</title>
+    <title>iTicket</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 <body>
-
 <%
     Object currentUserObj = session.getAttribute("currentUser");
-    if (currentUserObj!=null) {
+
+    User currentUser = null;
+    if (currentUserObj==null) {
         response.sendRedirect("/");
+        return;
+    }else {
+        currentUser = (User) currentUserObj;
     }
+
+    String movieIdStr = request.getParameter("movieId");
+
+    UUID movieId = null;
+    List<Session> sessions = List.of();
+    if (movieIdStr!=null) {
+        movieId = UUID.fromString(movieIdStr);
+        sessions = SessionRepo.findAllByMovieId(movieId);
+    }
+
 %>
 
-<div id="errorAlert" class="alert alert-danger" style="display: none;">
-    <strong>Error!</strong> <%=request.getSession().getAttribute("error")%>
+<div style="display: flex; justify-content: center; align-items: center; ">
+    <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-success" style="margin: 5px">Home</a>
 </div>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title text-center">Login/Sign Up</h3>
-                </div>
+<div style="display: flex; justify-content: center; " class="row">
+    <% if (movieId!=null) { %>
+        <% for (Session hallSession : sessions) { %>
+            <div class="col-3 card m-3" style="width: 18rem;">
                 <div class="card-body">
-                    <form action="../login" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Login/Sign Up</button>
-                        </div>
-                    </form>
+                    <h5 class="card-title"><%=hallSession.getMovie().getTitle()%></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Start <%=Utils.prettyDateTime(hallSession.getStartTime())%></h6>
+                    <h6 class="card-subtitle mb-2 text-muted">End <%=Utils.prettyDateTime(hallSession.getEndTime())%></h6>
+                    <p class="card-text">Hall: <%=hallSession.getHall().getName()%></p>
+                    <a href="${pageContext.request.contextPath}/seats.jsp?sessionId=<%=hallSession.getId()%>" class="card-link">Buy Ticket</a>
                 </div>
             </div>
-        </div>
-    </div>
+        <%}%>
+    <% } %>
 </div>
 
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    test();
-
-    function test() {
-        const error = "<%=session.getAttribute("error") == null?"null":session.getAttribute("error")%>";
-
-        if (error !== "null") {
-            showSuccessAlert()
-        }
-    }
-
-    function showSuccessAlert() {
-        const alertElement = document.getElementById("errorAlert");
-        alertElement.style.display = "block";
-        setTimeout(function () {
-            alertElement.style.display = "none";
-        }, 5000);
-        <%
-        session.removeAttribute("error");
-        %>
-    }
-</script>
 </body>
 </html>

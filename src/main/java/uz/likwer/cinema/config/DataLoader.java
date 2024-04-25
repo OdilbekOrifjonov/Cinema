@@ -1,4 +1,4 @@
-package com.example.chat.config;
+package uz.likwer.cinema.config;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

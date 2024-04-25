@@ -1,13 +1,13 @@
-package com.example.chat.filter;
+package uz.likwer.cinema.filter;
 
-import com.example.chat.entity.User;
-import com.example.chat.repo.UserRepo;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import uz.likwer.cinema.entity.User;
+import uz.likwer.cinema.repo.UserRepo;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +17,11 @@ import java.util.UUID;
 public class filter implements Filter {
     private static final List<String> openUrls = List.of(
             "login.jsp",
-            "login"
+            "login",
+            "checkmail.jsp",
+            "login/check-mail",
+            "checkTicket.jsp",
+            "ticketqr.jsp"
     );
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

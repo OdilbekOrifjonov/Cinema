@@ -11,13 +11,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
-public class Attachment {
+public class AttachmentContent {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
-    private String contentType;
-    private Integer size;
+    private byte[] content;
+
+    @OneToOne
+    private Attachment attachment;
 
 }

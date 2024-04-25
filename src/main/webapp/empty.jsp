@@ -1,3 +1,4 @@
+<%@ page import="uz.likwer.cinema.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -8,8 +9,13 @@
 <body>
 <%
     Object currentUserObj = session.getAttribute("currentUser");
-    if (currentUserObj!=null) {
+
+    User currentUser = null;
+    if (currentUserObj==null) {
         response.sendRedirect("/");
+        return;
+    }else {
+        currentUser = (User) currentUserObj;
     }
 %>
 

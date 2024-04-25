@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DeveloperToolsToolWindowSettingsV1" lastSelectedContentNodeId="base32-encoder-decoder">
+    <developerToolsConfigurations>
+      <developerToolConfiguration developerToolId="base32-encoder-decoder" id="af63e9ea-b9c8-4cae-83ae-8d732f924f13" name="Workbench">
+        <properties>
+          <property key="sourceText" type="INPUT" value="kotlin.String|asdaaaa" />
+          <property key="targetText" type="INPUT" value="kotlin.String|MFZWIYLBMFQQ====" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="qr-code-generator" id="f68b5019-1407-49be-adc4-350aff817fad" name="Workbench">
+        <properties>
+          <property key="contentText" type="INPUT" value="kotlin.String|hellolikwer@gmail.com" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="url-base64-encoder-decoder" id="051db3ed-73fa-424b-aa82-a3874233d7c0" name="Workbench">
+        <properties>
+          <property key="sourceText" type="INPUT" value="kotlin.String|asdsadaaa" />
+          <property key="targetText" type="INPUT" value="kotlin.String|YXNkc2FkYWFh" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="xml-text-escape" id="0d98cb2c-8222-40ac-8302-3a5cfcf7659d" name="Workbench">
+        <properties>
+          <property key="sourceText" type="INPUT" value="kotlin.String|asdasdAFasxvz c adsar21 412421 41231231312" />
+          <property key="targetText" type="INPUT" value="kotlin.String|asdasdAFasxvz c adsar21 412421 41231231312" />
+        </properties>
+      </developerToolConfiguration>
+    </developerToolsConfigurations>
+  </component>
+</project>
